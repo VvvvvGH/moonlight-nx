@@ -26,7 +26,7 @@ public:
     }
 };
 
-AppListWindow::AppListWindow(Widget *parent, const std::string &address): ContentWindow(parent, "Applications"), m_address(address) {
+AppListWindow::AppListWindow(Widget *parent, const std::string &address): ContentWindow(parent, "应用列表"), m_address(address) {
     set_left_pop_button();
     
     set_box_layout(Orientation::Vertical, Alignment::Minimum, 30, 10);
@@ -56,7 +56,7 @@ void AppListWindow::reload(std::function<void()> callback) {
                 loader->dispose();
                 
                 if (result.isSuccess()) {
-                    container()->add<Label>("* For adjust Gamepad buttons and Combo keys for a specific game, select this game with a Dpad and press Y");
+                    container()->add<Label>("* 要调整游戏的按键映射，请选择该游戏并按Y。");
                     container()->add<Widget>()->set_fixed_height(6);
                     
                     auto button_container = container()->add<Widget>();
@@ -92,12 +92,12 @@ void AppListWindow::run_game(int app_id) {
         GamepadMapper::instance().load_gamepad_map(app_id);
         push<StreamWindow>(m_address, app_id);
     } else {
-        auto alert = screen()->add<Alert>("Info", "Another game already running", false);
-        alert->add_button("Resume", [this, current_app_id] {
+        auto alert = screen()->add<Alert>("信息", "游戏正在运行", false);
+        alert->add_button("恢复", [this, current_app_id] {
             GamepadMapper::instance().load_gamepad_map(current_app_id);
             push<StreamWindow>(m_address, current_app_id);
         });
-        alert->add_button("Close", [this, app_id] {
+        alert->add_button("关闭", [this, app_id] {
             close_game([this, app_id] {
                 GamepadMapper::instance().load_gamepad_map(app_id);
                 push<StreamWindow>(m_address, app_id);

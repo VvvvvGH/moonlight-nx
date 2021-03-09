@@ -13,14 +13,14 @@
 
 using namespace nanogui;
 
-MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "Moonlight") {
+MainWindow::MainWindow(Widget *parent): ContentWindow(parent, "月光串流") {
     set_box_layout(Orientation::Vertical, Alignment::Minimum);
     
     set_right_title_button(FA_SYNC, [this] {
         this->reload();
     });
     set_right_title_button(FA_GAMEPAD, [this] {
-        push<InputSettingsWindow>(0, "Default");
+        push<InputSettingsWindow>(0, "默认");
     });
     set_right_title_button(FA_COG, [this] {
         push<SettingsWindow>();
@@ -34,7 +34,7 @@ void MainWindow::window_appear() {
 void MainWindow::reload() {
     clean_container();
     
-    container()->add<Label>("* For better performance use 5GHz WiFi, latest system firmware (11.0.0/11.0.1) and Atmosphère (0.18.0)");
+    container()->add<Label>("* 要获得最佳体验，请使用5G WiFi 、最新的系统 (11.0.0/11.0.1) 和大气层 (0.18.0)。如果卡顿，可尝试CPU超频。");
     container()->add<Widget>()->set_fixed_height(6);
     
     auto button_container = container()->add<Widget>();
@@ -48,7 +48,7 @@ void MainWindow::reload() {
                 if (button->is_paired()) {
                     push<AppListWindow>(button->host().address);
                 } else {
-                    auto loader = add<LoadingOverlay>("Pairing... (Enter 0000)");
+                    auto loader = add<LoadingOverlay>("正在配对... (请输入 0000)");
                     
                     GameStreamClient::instance().pair(button->host().address, "0000", [this, loader](auto result){
                         loader->dispose();
@@ -56,24 +56,24 @@ void MainWindow::reload() {
                         if (result.isSuccess()) {
                             reload();
                         } else {
-                            screen()->add<Alert>("Error", result.error());
+                            screen()->add<Alert>("错误", result.error());
                         }
                     });
                 }
             } else {
-                auto alert = screen()->add<Alert>("Error", "Innactive host...", false);
+                auto alert = screen()->add<Alert>("错误", "主机无响应...", false);
                 
                 if (!button->host().mac.empty()) {
-                    alert->add_button("Wake Up", [this, button] {
+                    alert->add_button("唤醒", [this, button] {
                         wake_up_host(button->host());
                     });
                 }
                 
-                alert->add_button("Delete", [this, button] {
+                alert->add_button("删除", [this, button] {
                     Settings::instance().remove_host(button->host());
                     reload();
                 });
-                alert->add_button("Cancel");
+                alert->add_button("取消");
             }
         });
     }
@@ -84,13 +84,13 @@ void MainWindow::reload() {
         auto addresses = GameStreamClient::instance().host_addresses_for_find();
         
         if (addresses.empty()) {
-            screen()->add<Alert>("Error", "Can't obtain IP address...");
+            screen()->add<Alert>("错误", "无法获取IP地址...");
         } else {
-            auto alert = screen()->add<Alert>("Find Host", "Search Host PC in the same network as yours Switch by evalute IP addresses from " + addresses.front() + " to " + addresses.back() + ".\nPlease check your PC and Switch network before tap on a Find.", false);
-            alert->add_button("Find", [this] {
+            auto alert = screen()->add<Alert>("查找主机", "查找与Switch处于相同网络的主机。查找范围：" + addresses.front() + " 到 " + addresses.back() + "。\n执行查找前请先检查PC 和 Switch 的网络。", false);
+            alert->add_button("查找", [this] {
                 find_host();
             });
-            alert->add_button("Cancel");
+            alert->add_button("取消");
         }
     });
     
@@ -119,7 +119,7 @@ void MainWindow::draw(NVGcontext *ctx) {
 }
 
 void MainWindow::wake_up_host(const Host &host) {
-    auto loader = add<LoadingOverlay>("Sending Wake Up...");
+    auto loader = add<LoadingOverlay>("发送唤醒命令...");
     
     GameStreamClient::instance().wake_up_host(host, [this, loader](auto result) {
         loader->dispose();
@@ -127,13 +127,13 @@ void MainWindow::wake_up_host(const Host &host) {
         if (result.isSuccess()) {
             reload();
         } else {
-            screen()->add<Alert>("Error", result.error());
+            screen()->add<Alert>("错误", result.error());
         }
     });
 }
 
 void MainWindow::find_host() {
-    auto loader = add<LoadingOverlay>("Find Host...");
+    auto loader = add<LoadingOverlay>("正在查找主机...");
     
     GameStreamClient::instance().find_host([this, loader](auto result) {
         loader->dispose();
@@ -142,7 +142,7 @@ void MainWindow::find_host() {
             Settings::instance().add_host(result.value());
             reload();
         } else {
-            screen()->add<Alert>("Error", result.error());
+            screen()->add<Alert>("错误", result.error());
         }
     });
 }

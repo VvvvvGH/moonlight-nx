@@ -5,12 +5,12 @@
 
 using namespace nanogui;
 
-AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") {
+AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "添加电脑") {
     set_left_pop_button();
     set_box_layout(Orientation::Vertical, Alignment::Fill);
     
     auto text = container()->add<TextBox>("");
-    text->set_placeholder("Enter the IP address of your GameStream PC");
+    text->set_placeholder("请输入电脑的 IP 地址");
     text->set_fixed_height(60);
     text->set_editable(true);
     
@@ -55,7 +55,7 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
         }
     });
     
-    auto connect = other_buttons_container->add<Button>("Connect");
+    auto connect = other_buttons_container->add<Button>("连接");
     connect->set_fixed_size(Size(100, 100));
     connect->set_callback([text, this] {
         if (text->value().size() > 0) {
@@ -67,7 +67,7 @@ AddHostWindow::AddHostWindow(Widget *parent): ContentWindow(parent, "Add Host") 
                 if (result.isSuccess()) {
                     this->pop();
                 } else {
-                    screen()->add<Alert>("Error", result.error());
+                    screen()->add<Alert>("错误", result.error());
                 }
             });
         }

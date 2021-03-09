@@ -30,7 +30,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     left_container->set_layout(new GroupLayout(30, 10, 30, 10));
     left_container->set_fixed_width(container_width);
     
-    left_container->add<Label>("Resolution");
+    left_container->add<Label>("分辨率");
     std::vector<std::string> resolutions = { "720p", "1080p" };
     auto resolution_combo_box = left_container->add<ComboBox>(resolutions);
     resolution_combo_box->set_fixed_width(component_width);
@@ -49,13 +49,13 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         DEFAULT;
     }
     
-    auto ignore_unsupported_resolutions = left_container->add<CheckBox>("Ignore unsupported resolutions");
+    auto ignore_unsupported_resolutions = left_container->add<CheckBox>("忽略不支持的分辨率");
     ignore_unsupported_resolutions->set_checked(Settings::instance().ignore_unsupported_resolutions());
     ignore_unsupported_resolutions->set_callback([](auto value) {
         Settings::instance().set_ignore_unsupported_resolutions(value);
     });
     
-    left_container->add<Label>("FPS");
+    left_container->add<Label>("帧数");
     std::vector<std::string> fps = { "30", "60" };
     auto fps_combo_box = left_container->add<ComboBox>(fps);
     fps_combo_box->set_fixed_width(component_width);
@@ -74,8 +74,8 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         DEFAULT;
     }
     
-    left_container->add<Label>("Video codec");
-    std::vector<std::string> video_codec = { "H.264", "HEVC (H.265, Experimental)" };
+    left_container->add<Label>("视频编码");
+    std::vector<std::string> video_codec = { "H.264", "HEVC (H.265, 实验性)" };
     auto video_codec_combo_box = left_container->add<ComboBox>(video_codec);
     video_codec_combo_box->set_fixed_width(component_width);
     video_codec_combo_box->popup()->set_fixed_width(component_width);
@@ -94,7 +94,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     }
     
     char bitrate_str[100];
-    sprintf(bitrate_str, "Video bitrate: %0.1f Mbps", float(Settings::instance().bitrate()) / 1000);
+    sprintf(bitrate_str, "视频码率: %0.1f Mbps", float(Settings::instance().bitrate()) / 1000);
     
     auto video_bitrate_label = left_container->add<Label>(bitrate_str);
     auto video_bitrate_slider = left_container->add<Slider>();
@@ -108,13 +108,13 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         video_bitrate_slider->set_highlighted_range({0, value / 150});
         float bitrate = round(2.0 * value) / 2.0;
         char bitrate_str[100];
-        sprintf(bitrate_str, "Video bitrate: %0.1f Mbps", bitrate);
+        sprintf(bitrate_str, "视频码率: %0.1f Mbps", bitrate);
         video_bitrate_label->set_caption(bitrate_str);
         Settings::instance().set_bitrate(bitrate * 1000);
     });
     
-    left_container->add<Label>("Input Settings");
-    auto click_by_tap = left_container->add<CheckBox>("Mouse click by tap on screen");
+    left_container->add<Label>("输入设置");
+    auto click_by_tap = left_container->add<CheckBox>("点按屏幕作为鼠标左键");
     click_by_tap->set_checked(Settings::instance().click_by_tap());
     click_by_tap->set_callback([](auto value) {
         Settings::instance().set_click_by_tap(value);
@@ -124,8 +124,8 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     right_container->set_layout(new GroupLayout(30, 10, 30, 10));
     right_container->set_fixed_width(container_width + 90);
     
-    right_container->add<Label>("Decoder Threads");
-    std::vector<std::string> decoder_threads = { "0 (No use threads)", "2", "3", "4" };
+    right_container->add<Label>("解码器线程");
+    std::vector<std::string> decoder_threads = { "0 (不用多线程)", "2", "3", "4" };
     auto decoder_threads_combo_box = right_container->add<ComboBox>(decoder_threads);
     decoder_threads_combo_box->set_fixed_width(component_width);
     decoder_threads_combo_box->popup()->set_fixed_width(component_width);
@@ -147,27 +147,27 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         DEFAULT;
     }
     
-    right_container->add<Label>("Stream Settings");
-    auto sops = right_container->add<CheckBox>("Use Streaming Optimal Playable Settings");
+    right_container->add<Label>("串流设置");
+    auto sops = right_container->add<CheckBox>("使用优化的游戏设置");
     sops->set_checked(Settings::instance().sops());
     sops->set_callback([](auto value) {
         Settings::instance().set_sops(value);
     });
     
-    auto play_audio = right_container->add<CheckBox>("Play Audio on PC");
+    auto play_audio = right_container->add<CheckBox>("在电脑上播放音频");
     play_audio->set_checked(Settings::instance().play_audio());
     play_audio->set_callback([](auto value) {
         Settings::instance().set_play_audio(value);
     });
     
-    right_container->add<Label>("Debug");
-    auto write_log = right_container->add<CheckBox>("Write log");
+    right_container->add<Label>("调试");
+    auto write_log = right_container->add<CheckBox>("写日志");
     write_log->set_checked(Settings::instance().write_log());
     write_log->set_callback([](auto value) {
         Settings::instance().set_write_log(value);
     });
     
-    auto log_button = right_container->add<Button>("Show logs");
+    auto log_button = right_container->add<Button>("显示日志");
     log_button->set_fixed_width(component_width);
     log_button->set_callback([this] {
         push<LogsWindow>();
