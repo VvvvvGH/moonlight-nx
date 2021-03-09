@@ -267,8 +267,7 @@ void InputSettingsWindow::window_disappear() {
 
 void InputSettingsWindow::assign_button(GamepadButtons button) {
     GamepadButtons current = GamepadMapper::instance().mapped_button(button);
-    
-    overlay = screen()->add<GamepadInputOverlay>("请按下需要映射的按钮 \"" + GamepadMapper::instance().button_label(button, false) + "\"");
+    overlay = screen()->add<GamepadInputOverlay>("请按下需要映射的按钮 \"" + GamepadMapper::mapper()->button_label(button, false) + "\"");
     overlay->set_completion([this, button, current](auto result) {
         overlay->dispose();
         overlay = NULL;
@@ -283,8 +282,7 @@ void InputSettingsWindow::assign_button(GamepadButtons button) {
 
 void InputSettingsWindow::assign_combo(GamepadCombo combo, int buttons_count) {
     auto current = GamepadMapper::instance().combo_buttons(combo);
-    
-    overlay = screen()->add<GamepadInputOverlay>("请按下需要映射的按钮组合 \"" + GamepadMapper::instance().combo_label(combo) + "\"", buttons_count);
+    overlay = screen()->add<GamepadInputOverlay>("请按下需要映射的按钮组合 \"" + GamepadMapper::mapper()->combo_label(combo) + "\"", buttons_count);
     overlay->set_completion([this, combo, current](auto result) {
         overlay->dispose();
         overlay = NULL;
