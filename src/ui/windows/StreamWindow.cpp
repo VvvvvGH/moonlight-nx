@@ -30,7 +30,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_session->set_audio_renderer(new DebugFileRecorderAudioRenderer(false));
     #endif
     
-    m_loader = add<LoadingOverlay>("Starting...");
+    m_loader = add<LoadingOverlay>("正在启动...");
     
     inc_ref();
     m_session->start([this](auto result) {
@@ -42,7 +42,7 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
         if (result.isSuccess()) {
             //
         } else {
-            screen()->add<Alert>("Error", result.error());
+            screen()->add<Alert>("错误", result.error());
             
             auto app = static_cast<Application *>(screen());
             app->pop_window();
@@ -77,14 +77,14 @@ void StreamWindow::draw(NVGcontext *ctx) {
         nvgFontFace(ctx, "icons");
         nvgText(ctx, 20, height() - 30, utf8(FA_EXCLAMATION_TRIANGLE).data(), NULL);
         nvgFontFace(ctx, "sans-bold");
-        nvgText(ctx, 50, height() - 28, "Bad connection...", NULL);
+        nvgText(ctx, 50, height() - 28, "连接不稳定...", NULL);
         
         nvgFontBlur(ctx, 0);
         nvgFillColor(ctx, Color(255, 255, 255, 255));
         nvgFontFace(ctx, "icons");
         nvgText(ctx, 20, height() - 30, utf8(FA_EXCLAMATION_TRIANGLE).data(), NULL);
         nvgFontFace(ctx, "sans-bold");
-        nvgText(ctx, 50, height() - 28, "Bad connection...", NULL);
+        nvgText(ctx, 50, height() - 28, "连接不稳定...", NULL);
     }
     
     if (m_draw_stats) {
@@ -95,20 +95,20 @@ void StreamWindow::draw(NVGcontext *ctx) {
         auto stats = m_session->session_stats();
         
         offset += sprintf(&output[offset],
-                          "Estimated host PC frame rate: %.2f FPS\n"
-                          "Incoming frame rate from network: %.2f FPS\n"
-                          "Decoding frame rate: %.2f FPS\n"
-                          "Rendering frame rate: %.2f FPS\n",
+                          "估计主机帧率: %.2f FPS\n"
+                          "网络输入帧率: %.2f FPS\n"
+                          "解码器帧率: %.2f FPS\n"
+                          "渲染帧率: %.2f FPS\n",
                           stats->video_decode_stats.total_fps,
                           stats->video_decode_stats.received_fps,
                           stats->video_decode_stats.decoded_fps,
                           stats->video_render_stats.rendered_fps);
         
         offset += sprintf(&output[offset],
-                          "Frames dropped by your network connection: %.2f%% (Total: %u)\n"
-                          "Average receive time: %.2f ms\n"
-                          "Average decoding time: %.2f ms\n"
-                          "Average rendering time: %.2f ms\n",
+                          "网络连接掉帧: %.2f%% (Total: %u)\n"
+                          "平均接收时间: %.2f 毫秒\n"
+                          "平均解码时间: %.2f 毫秒\n"
+                          "平均渲染时间: %.2f 毫秒\n",
                           (float)stats->video_decode_stats.network_dropped_frames / stats->video_decode_stats.total_frames * 100,
                           stats->video_decode_stats.network_dropped_frames,
                           (float)stats->video_decode_stats.total_reassembly_time / stats->video_decode_stats.received_frames,

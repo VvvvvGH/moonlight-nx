@@ -96,11 +96,11 @@ public:
             nvgText(ctx, width() / 2, height() / 2, string.c_str(), NULL);
             
             if (is_done()) {
-                string = "Press \"" +
+                string = "按 \"" +
                     GamepadMapper::instance().button_label(GamepadButtonA, true) +
-                    "\" for Accept, \"" +
+                    "\" 确认。 \"" +
                     GamepadMapper::instance().button_label(GamepadButtonB, true) +
-                    "\" for Cancel.";
+                    "\" 取消。";
                 nvgText(ctx, width() / 2, height() / 2 + 80, string.c_str(), NULL);
             }
         }
@@ -125,7 +125,7 @@ private:
 
 static GamepadInputOverlay* overlay = nullptr;
 
-InputSettingsWindow::InputSettingsWindow(Widget* parent, int app_id, std::string app_name): ContentWindow(parent, "Input Settings (" + app_name + ")") {
+InputSettingsWindow::InputSettingsWindow(Widget* parent, int app_id, std::string app_name): ContentWindow(parent, "手柄设置 (" + app_name + ")") {
     m_app_id = app_id;
     GamepadMapper::instance().load_gamepad_map(m_app_id);
     
@@ -153,7 +153,7 @@ void InputSettingsWindow::reload_gamepad_input_settings() {
         reload_gamepad_input_settings();
     });
     
-    container()->add<Label>("Gamepad mapping (Switch -> X360)");
+    container()->add<Label>("按键映射 (Switch -> X360)");
     
     auto content = container()->add<Widget>();
     content->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 30, 10));
@@ -193,7 +193,7 @@ void InputSettingsWindow::reload_combo_settings() {
         reload_combo_settings();
     });
     
-    container()->add<Label>("Keyboard Combo mapping");
+    container()->add<Label>("键盘快捷键映射");
     
     auto content = container()->add<Widget>();
     content->set_layout(new BoxLayout(Orientation::Horizontal, Alignment::Minimum, 30, 10));
@@ -268,7 +268,7 @@ void InputSettingsWindow::window_disappear() {
 void InputSettingsWindow::assign_button(GamepadButtons button) {
     GamepadButtons current = GamepadMapper::instance().mapped_button(button);
     
-    overlay = screen()->add<GamepadInputOverlay>("Press button for reassign \"" + GamepadMapper::instance().button_label(button, false) + "\"");
+    overlay = screen()->add<GamepadInputOverlay>("请按下需要映射的按钮 \"" + GamepadMapper::instance().button_label(button, false) + "\"");
     overlay->set_completion([this, button, current](auto result) {
         overlay->dispose();
         overlay = NULL;
@@ -284,7 +284,7 @@ void InputSettingsWindow::assign_button(GamepadButtons button) {
 void InputSettingsWindow::assign_combo(GamepadCombo combo, int buttons_count) {
     auto current = GamepadMapper::instance().combo_buttons(combo);
     
-    overlay = screen()->add<GamepadInputOverlay>("Enter combo for reassign \"" + GamepadMapper::instance().combo_label(combo) + "\"", buttons_count);
+    overlay = screen()->add<GamepadInputOverlay>("请按下需要映射的按钮组合 \"" + GamepadMapper::instance().combo_label(combo) + "\"", buttons_count);
     overlay->set_completion([this, combo, current](auto result) {
         overlay->dispose();
         overlay = NULL;
