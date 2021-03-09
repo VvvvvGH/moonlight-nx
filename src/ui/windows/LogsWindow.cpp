@@ -4,7 +4,7 @@
 
 using namespace nanogui;
 
-LogsWindow::LogsWindow(Widget *parent): ContentWindow(parent, "Logs") {
+LogsWindow::LogsWindow(Widget *parent): ContentWindow(parent, "日志") {
     set_left_pop_button();
     set_right_title_button(FA_TRASH_ALT, [this] {
         remove(Settings::instance().log_path().c_str());
@@ -21,7 +21,7 @@ void LogsWindow::reload() {
     Data data = Data::read_from_file(Settings::instance().log_path());
     
     if (data.is_empty()) {
-        auto label = container()->add<Label>("No logs...");
+        auto label = container()->add<Label>("没有找到日志...");
         label->set_fixed_width(container()->width());
     } else {
         std::stringstream stream((char *)data.bytes());
@@ -38,7 +38,7 @@ void LogsWindow::reload() {
         
         if (logs.size() > 100) {
             logs = std::vector<std::string>(logs.end() - 100, logs.end());
-            logs.insert(logs.begin(), "* Show last 100 lines");
+            logs.insert(logs.begin(), "* 显示后100行");
         }
         
         for (auto log: logs) {

@@ -6,7 +6,7 @@ using namespace nanogui;
 AddHostButton::AddHostButton(Widget* parent, AddHostButtonType type): Button(parent, ""), m_type(type) {
     set_layout(new BoxLayout(Orientation::Vertical, Alignment::Middle));
     add<Widget>()->set_fixed_height(170);
-    auto label = add<Label>(type == AddHostButtonTypeFind ? "Find Host" : "Add Host");
+    auto label = add<Label>(type == AddHostButtonTypeFind ? "查找主机" : "添加主机");
     label->set_font_size(20);
     screen()->perform_layout();
 }

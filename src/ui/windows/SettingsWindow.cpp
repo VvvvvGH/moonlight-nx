@@ -75,7 +75,7 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
     }
     
     left_container->add<Label>("视频编码");
-    std::vector<std::string> video_codec = { "H.264", "HEVC (H.265, 实验性)" };
+    std::vector<std::string> video_codec = { "H.264", "HEVC (H.265)" };
     auto video_codec_combo_box = left_container->add<ComboBox>(video_codec);
     video_codec_combo_box->set_fixed_width(component_width);
     video_codec_combo_box->popup()->set_fixed_width(component_width);

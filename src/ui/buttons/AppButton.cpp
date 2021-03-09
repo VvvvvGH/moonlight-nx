@@ -18,7 +18,7 @@ AppButton::AppButton(Widget* parent, const std::string &address, AppInfo app, in
     set_layout(new BoxLayout(Orientation::Vertical, Alignment::Minimum, 10));
     
     if (m_app.app_id == current_game) {
-        m_label->set_caption(m_label->caption() + " (Running)");
+        m_label->set_caption(m_label->caption() + " (正在运行)");
     }
     
     if (!BoxArtManager::instance().has_boxart(m_app.app_id)) {

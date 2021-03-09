@@ -34,7 +34,7 @@ void MainWindow::window_appear() {
 void MainWindow::reload() {
     clean_container();
     
-    container()->add<Label>("* 要获得最佳体验，请使用5G WiFi 、最新的系统 (11.0.0/11.0.1) 和大气层 (0.18.0)。如果卡顿，可尝试CPU超频。");
+    container()->add<Label>("* 要获得最佳体验，请使用 5G WiFi 、最新的系统 (11.0.0/11.0.1) 和大气层 (0.18.0)");
     container()->add<Widget>()->set_fixed_height(6);
     
     auto button_container = container()->add<Widget>();
